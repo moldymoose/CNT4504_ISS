@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="5592a1be-1654-4554-84b9-08c5a72678ae" name="Changes" comment="Added packages/classes for client/server">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Client/ClientProgram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/ClientProgram.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Server/ServerProgram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/ServerProgram.java" afterDir="false" />
@@ -22,6 +23,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="2d3f666b00d39fb7b58259ce005dce4b00be32d1" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitHubPullRequestSearchHistory">{
@@ -50,7 +56,7 @@
     "Application.Client.executor": "Run",
     "Application.Server.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "stringTest",
     "kotlin-language-version-configured": "true"
   }
 }]]></component>
@@ -74,15 +80,9 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="RunBoth" type="CompoundRunConfigurationType">
-      <toRun name="Client" type="Application" />
-      <toRun name="Server" type="Application" />
-      <method v="2" />
-    </configuration>
     <list>
       <item itemvalue="Application.Server" />
       <item itemvalue="Application.Client" />
-      <item itemvalue="Compound.RunBoth" />
     </list>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />

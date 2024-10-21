@@ -6,14 +6,18 @@ import java.util.Scanner;
 
 public class ClientProgram {
     public static void main(String[] args) {
+
+        //Connects to socket on port on local machine
         try (Socket socket = new Socket("localhost", 6942)) {
             OutputStream output = socket.getOutputStream();
             PrintWriter writer = new PrintWriter(output, true);
 
+            //Gets input from user
             Scanner scanner = new Scanner(System.in);
             System.out.print("Enter a string: ");
             String message = scanner.nextLine();
 
+            //Uses writer to output string to server
             writer.println(message);
 
             socket.close();

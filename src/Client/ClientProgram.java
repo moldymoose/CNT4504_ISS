@@ -20,6 +20,11 @@ public class ClientProgram {
             //Uses writer to output string to server
             writer.println(message);
 
+            //Receives the server responses for requested function
+            InputStream input = socket.getInputStream();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            String serverResponseString = reader.readline();
+
             socket.close();
         } catch (IOException e) {
             e.printStackTrace();

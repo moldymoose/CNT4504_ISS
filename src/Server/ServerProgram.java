@@ -23,10 +23,7 @@ public class ServerProgram {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(input));
                 PrintWriter writer = new PrintWriter(output, true);
 
-                //reads line from client input
-                String message = reader.readLine();
-
-                System.out.println("Recieved from client:" + message);
+                //
 
                 socket.close();
             }

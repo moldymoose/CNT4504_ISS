@@ -7,7 +7,7 @@ import java.util.Scanner;
 public class ClientProgram {
     public static void main(String[] args) {
 
-        //Connects to socket on port on local machine
+        //Requests a connection from the local machine server program at port 6942
         try (Socket socket = new Socket("localhost", 6942)) {
             OutputStream output = socket.getOutputStream();
             PrintWriter writer = new PrintWriter(output, true);
@@ -20,7 +20,7 @@ public class ClientProgram {
             //Uses writer to output string to server
             writer.println(message);
 
-            socket.close();
+            //socket.close();
         } catch (IOException e) {
             e.printStackTrace();
         }

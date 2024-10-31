@@ -17,7 +17,14 @@ public class ClientProgram {
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
             PrintWriter writer = new PrintWriter(output, true);
 
-            mainMenu();
+            String command = "invalid";
+            int numRuns;
+            while (!command.equals("exit")) {
+                command = menuChoice();
+                if (!command.equals("invalid")) {
+                    numRuns = getNumRuns();
+                }
+            }
 
             //socket.close();
         } catch (IOException e) {
@@ -25,16 +32,13 @@ public class ClientProgram {
         }
     }
 
-    public static String mainMenu() {
+    public static String menuChoice() {
 
         //scanner for menu
         Scanner scanner = new Scanner(System.in);
         String choice;
-
-        //draws the menu and gets the input
         drawMenu();
         choice = scanner.nextLine();
-
         switch(choice) {
             case "1":
                 return "date";
@@ -67,5 +71,26 @@ public class ClientProgram {
         System.out.println("6. Running Processes");
         System.out.println("7. Exit");
         System.out.print("\nInput: ");
+    }
+
+    public static int getNumRuns() {
+        Scanner scanner = new Scanner(System.in);
+        int numRuns = -1;
+
+        System.out.print("How many times would you like to run: ");
+        while (numRuns < 0) {
+            if (scanner.hasNextInt()) {
+                numRuns = scanner.nextInt();
+                if (numRuns > 0) {
+                    return numRuns;
+                }
+            }
+            System.out.println("That's not a valid integer. Please try again.");
+            scanner.next();
+        }
+        return numRuns;
+    }
+    public static void runThread() {
+
     }
 }

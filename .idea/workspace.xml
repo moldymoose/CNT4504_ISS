@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5592a1be-1654-4554-84b9-08c5a72678ae" name="Changes" comment="updated code to begin implementing unix command functionality">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="5592a1be-1654-4554-84b9-08c5a72678ae" name="Changes" comment="Added logic for number of runs">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Client/ClientProgram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/ClientProgram.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Server/ServerProgram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/ServerProgram.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -123,7 +123,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730323651468</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Added logic for number of runs">
+      <option name="closed" value="true" />
+      <created>1730407515228</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1730407515228</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -141,6 +149,7 @@
     <MESSAGE value="Initial Commit" />
     <MESSAGE value="Added packages/classes for client/server" />
     <MESSAGE value="updated code to begin implementing unix command functionality" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated code to begin implementing unix command functionality" />
+    <MESSAGE value="Added logic for number of runs" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added logic for number of runs" />
   </component>
 </project>

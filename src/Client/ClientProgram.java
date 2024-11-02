@@ -7,28 +7,15 @@ import java.util.Scanner;
 public class ClientProgram {
     public static void main(String[] args) {
 
-        //Requests a connection from the local machine server program at port 6942
-        try (Socket socket = new Socket("localhost", 6942)) {
-            //Input output streams
-            InputStream input = socket.getInputStream();
-            OutputStream output = socket.getOutputStream();
+        String command = "invalid";
+        int numRuns;
 
-            //Reader/writer for converting input/output streams from byte data to usable strings
-            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
-            PrintWriter writer = new PrintWriter(output, true);
-
-            String command = "invalid";
-            int numRuns;
-            while (!command.equals("exit")) {
-                command = menuChoice();
-                if (!command.equals("invalid")) {
-                    numRuns = getNumRuns();
-                }
+        while (!command.equals("exit")) {
+            command = menuChoice();
+            if (!command.equals("invalid") && !command.equals("exit")) {
+                numRuns = getNumRuns();
+                threadHandler(numRuns, command);
             }
-
-            //socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -81,16 +68,50 @@ public class ClientProgram {
         while (numRuns < 0) {
             if (scanner.hasNextInt()) {
                 numRuns = scanner.nextInt();
-                if (numRuns > 0) {
+                if (numRuns >= 0) {
                     return numRuns;
                 }
-            }
-            System.out.println("That's not a valid integer. Please try again.");
-            scanner.next();
+            } else scanner.next();
+            System.out.print("That's not a valid integer. Please enter a positive integer: ");
         }
         return numRuns;
     }
-    public static void runThread() {
+    public static void threadHandler(int numRuns, String command) {
+        System.out.printf("I'm running %d threads lol.  The command is %s\n", numRuns, command);
+    }
+}
 
+class commandThread extends Thread {
+    private String command;
+    private String host;
+    private int port;
+
+    public commandThread(String command, String host, int port) {
+        this.command = command;
+        this.host = host;
+        this.port = port;
+    }
+
+    public void run() {
+        long startTime = System.nanoTime();
+
+        try (Socket socket = new Socket(host, port)) {
+            //Input output streams
+            InputStream input = socket.getInputStream();
+            OutputStream output = socket.getOutputStream();
+
+            //Reader/writer for converting input/output streams from byte data to usable strings
+            BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+            PrintWriter writer = new PrintWriter(output, true);
+
+
+
+
+        } catch (IOException ex) {
+            System.out.println("I/O error: " + ex.getMessage());
+        }
+
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime)/1000000000; // duration in seconds
     }
 }

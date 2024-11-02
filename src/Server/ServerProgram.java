@@ -23,7 +23,7 @@ public class ServerProgram {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(input));
                 PrintWriter writer = new PrintWriter(output, true);
 
-                //
+
 
                 socket.close();
             }

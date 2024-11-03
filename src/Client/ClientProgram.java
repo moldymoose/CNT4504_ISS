@@ -9,13 +9,15 @@ public class ClientProgram {
 
         String command = "invalid";
         int numRuns;
+        String host = "139.62.210.155";
+        int port = 4000;
 
         while (!command.equals("exit")) {
-            command = menuChoice();
             if (!command.equals("invalid") && !command.equals("exit")) {
                 numRuns = getNumRuns();
-                threadHandler(numRuns, command);
+                threadHandler(numRuns, command, host, port);
             }
+            command = menuChoice();
         }
     }
 
@@ -76,8 +78,33 @@ public class ClientProgram {
         }
         return numRuns;
     }
-    public static void threadHandler(int numRuns, String command) {
-        System.out.printf("I'm running %d threads lol.  The command is %s\n", numRuns, command);
+    public static void threadHandler(int numRuns, String command, String host, int port) {
+        long startTime = System.nanoTime();
+
+        //array of threads
+        Thread[] threads = new Thread[numRuns];
+
+        //loops through array creating new commandThreads and starting them
+        for (int i = 0; i < numRuns; i++) {
+            threads[i] = new commandThread(command, host, port);
+            threads[i].start();
+        }
+
+        //loops through thread array and waits for threads to be completed
+        for (Thread j : threads) {
+            try {
+                j.join(); // Wait for each thread to finish
+            } catch (InterruptedException ex) {
+                ex.printStackTrace();
+            }
+        }
+
+        long endTime = System.nanoTime();
+        long duration = (endTime - startTime)/1000000000; // duration in seconds
+        long average = duration/numRuns;
+
+        System.out.println("----Total Time: " + duration + " seconds----");
+        System.out.println("----Average Time: " + average + " seconds----");
     }
 }
 
@@ -104,14 +131,20 @@ class commandThread extends Thread {
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
             PrintWriter writer = new PrintWriter(output, true);
 
+            writer.println(command);
 
-
-
+            String s;
+            while ((s = reader.readLine()) != null) {
+                System.out.println(s);
+            }
+            System.out.println(reader.readLine());
         } catch (IOException ex) {
             System.out.println("I/O error: " + ex.getMessage());
         }
 
         long endTime = System.nanoTime();
         long duration = (endTime - startTime)/1000000000; // duration in seconds
+
+        System.out.println("----Thread Time: " + duration + " seconds----");
     }
 }

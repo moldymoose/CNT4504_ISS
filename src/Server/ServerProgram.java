@@ -9,7 +9,7 @@ public class ServerProgram {
 
 
         //Creates socket at port 6942
-        try (ServerSocket serverSocket = new ServerSocket(6942)) {
+        try (ServerSocket serverSocket = new ServerSocket(4000)) {
 
             while (true) {
                 //Accepts incoming connections
@@ -23,8 +23,17 @@ public class ServerProgram {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(input));
                 PrintWriter writer = new PrintWriter(output, true);
 
+                String command = reader.readLine();
 
+                Process p = Runtime.getRuntime().exec(command);
 
+                BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                //BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
+
+                String s = null;
+                while ((s = stdInput.readLine()) != null) {
+                    writer.println(s);
+                }
                 socket.close();
             }
 

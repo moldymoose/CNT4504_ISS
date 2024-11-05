@@ -6,21 +6,59 @@ import java.util.Scanner;
 
 public class ClientProgram {
     public static void main(String[] args) {
+        //get host address and port
+        String host = getHost();
+        int port = getPort();
 
         String command = "invalid";
-        int numRuns;
-        String host = "139.62.210.155";
-        int port = 4000;
-
+        //Loops until exit command is issued
         while (!command.equals("exit")) {
+            //draws menu and prompts user for command
+            command = menuChoice();
+
+            //if a valid command is provided user is prompted for a number of runs and threads are created/ran
             if (!command.equals("invalid") && !command.equals("exit")) {
-                numRuns = getNumRuns();
+                int numRuns = getNumRuns();
                 threadHandler(numRuns, command, host, port);
             }
-            command = menuChoice();
         }
     }
 
+    public static int getPort() {
+        int port = -1;
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Pick a port from 1025-4998: ");
+        while (port < 1025) {
+            if (scanner.hasNextInt()) {
+                port = scanner.nextInt();
+                if (port >=1025 && port <=4998) {
+                    return port;
+                }
+            } else scanner.next();
+            System.out.print("That's not a valid port. Please pick a port from 1025-4998: ");
+        }
+        return port;
+    }
+    public static String getHost() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Enter your host address: ");
+        String host = scanner.nextLine();
+        return host;
+    }
+
+    //draws menu
+    public static void drawMenu() {
+        System.out.println("\n====Menu Options====");
+        System.out.println("1. Date and Time");
+        System.out.println("2. Uptime");
+        System.out.println("3. Memory Use");
+        System.out.println("4. Netstat");
+        System.out.println("5. Current Users");
+        System.out.println("6. Running Processes");
+        System.out.println("7. Exit");
+        System.out.print("\nInput: ");
+    }
+    //gets input from user and returns the corosponding command
     public static String menuChoice() {
 
         //scanner for menu
@@ -49,19 +87,7 @@ public class ClientProgram {
                 return "invalid";
         }
     }
-
-    public static void drawMenu() {
-        System.out.println("----Menu Options----");
-        System.out.println("1. Date and Time");
-        System.out.println("2. Uptime");
-        System.out.println("3. Memory Use");
-        System.out.println("4. Netstat");
-        System.out.println("5. Current Users");
-        System.out.println("6. Running Processes");
-        System.out.println("7. Exit");
-        System.out.print("\nInput: ");
-    }
-
+    //gets number of runs from the user
     public static int getNumRuns() {
         Scanner scanner = new Scanner(System.in);
         int numRuns = -1;
@@ -78,6 +104,8 @@ public class ClientProgram {
         }
         return numRuns;
     }
+
+    //creates specified number of threads to run specified command
     public static void threadHandler(int numRuns, String command, String host, int port) {
         long startTime = System.nanoTime();
 
@@ -100,11 +128,13 @@ public class ClientProgram {
         }
 
         long endTime = System.nanoTime();
-        long duration = (endTime - startTime)/1000000000; // duration in seconds
-        long average = duration/numRuns;
+        long durationNano = endTime - startTime;
+        long averageNano = durationNano/numRuns;
+        double duration = durationNano /1_000_000_000.0; // duration in nano seconds
+        double average = averageNano/1_000_000_000.0;
 
-        System.out.println("----Total Time: " + duration + " seconds----");
-        System.out.println("----Average Time: " + average + " seconds----");
+        System.out.printf("----Total Time: %.3f seconds----\n", duration);
+        System.out.printf("----Average Time: %.3f seconds----\n", average);
     }
 }
 
@@ -122,6 +152,7 @@ class commandThread extends Thread {
     public void run() {
         long startTime = System.nanoTime();
 
+        StringBuilder sb = new StringBuilder();
         try (Socket socket = new Socket(host, port)) {
             //Input output streams
             InputStream input = socket.getInputStream();
@@ -131,20 +162,25 @@ class commandThread extends Thread {
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
             PrintWriter writer = new PrintWriter(output, true);
 
+            //sends unix command to server
             writer.println(command);
 
+            //reads output from unix command sent by server and prints it
             String s;
             while ((s = reader.readLine()) != null) {
-                System.out.println(s);
+                sb.append(s);
+                sb.append("\n");
             }
-            System.out.println(reader.readLine());
         } catch (IOException ex) {
             System.out.println("I/O error: " + ex.getMessage());
+        } finally {
+            //calculates thread time and prints
+            long endTime = System.nanoTime();
+            long durationNano = endTime - startTime;
+            double duration = durationNano /1_000_000_000.0; // duration in nano seconds
+
+            sb.append(String.format("--Thread Time: %.3f seconds--\n", duration));
+            System.out.println(sb.toString());
         }
-
-        long endTime = System.nanoTime();
-        long duration = (endTime - startTime)/1000000000; // duration in seconds
-
-        System.out.println("----Thread Time: " + duration + " seconds----");
     }
 }

@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="5592a1be-1654-4554-84b9-08c5a72678ae" name="Changes" comment="Added logic for number of runs">
+    <list default="true" id="5592a1be-1654-4554-84b9-08c5a72678ae" name="Changes" comment="Implemented threads">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Client/ClientProgram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Client/ClientProgram.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Server/ServerProgram.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Server/ServerProgram.java" afterDir="false" />
@@ -131,7 +131,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730407515228</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Implemented threads">
+      <option name="closed" value="true" />
+      <created>1730674630757</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1730674630757</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -150,6 +158,7 @@
     <MESSAGE value="Added packages/classes for client/server" />
     <MESSAGE value="updated code to begin implementing unix command functionality" />
     <MESSAGE value="Added logic for number of runs" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added logic for number of runs" />
+    <MESSAGE value="Implemented threads" />
+    <option name="LAST_COMMIT_MESSAGE" value="Implemented threads" />
   </component>
 </project>

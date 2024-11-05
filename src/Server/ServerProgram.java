@@ -2,17 +2,16 @@ package Server;
 
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 
 public class ServerProgram {
     public static void main(String[] args) {
 
-
-
-        //Creates socket at port 6942
-        try (ServerSocket serverSocket = new ServerSocket(4000)) {
-
+        //gets port number from user and creates socket
+        int port = getPort();
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
+            //accepts incoming connections
             while (true) {
-                //Accepts incoming connections
                 Socket socket = serverSocket.accept();
 
                 //Input output streams
@@ -23,22 +22,40 @@ public class ServerProgram {
                 BufferedReader reader = new BufferedReader(new InputStreamReader(input));
                 PrintWriter writer = new PrintWriter(output, true);
 
+                //reads line for incoming commands
                 String command = reader.readLine();
 
+                //executes command and reads output into stdInput buffered reader
                 Process p = Runtime.getRuntime().exec(command);
-
                 BufferedReader stdInput = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                //BufferedReader stdError = new BufferedReader(new InputStreamReader(p.getErrorStream()));
 
+                //loops through multiple lines of command output and prints them to the client
                 String s = null;
                 while ((s = stdInput.readLine()) != null) {
                     writer.println(s);
                 }
+                //closes socket when finished
                 socket.close();
             }
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
+    }
+    //prompts user for a port number and returns it
+    public static int getPort() {
+        int port = -1;
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Pick a port from 1025-4998: ");
+        while (port < 1025) {
+            if (scanner.hasNextInt()) {
+                port = scanner.nextInt();
+                if (port >=1025 && port <=4998) {
+                    return port;
+                }
+            } else scanner.next();
+            System.out.print("That's not a valid port. Please pick a port from 1025-4998: ");
+        }
+        return port;
     }
 }

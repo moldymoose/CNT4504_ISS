@@ -111,10 +111,12 @@ public class ClientProgram {
 
         //array of threads
         Thread[] threads = new Thread[numRuns];
+        // Array to store durations
+        long[] threadDurations = new long[numRuns];
 
         //loops through array creating new commandThreads and starting them
         for (int i = 0; i < numRuns; i++) {
-            threads[i] = new commandThread(command, host, port);
+            threads[i] = new commandThread(command, host, port, threadDurations, i);
             threads[i].start();
         }
 
@@ -129,12 +131,17 @@ public class ClientProgram {
 
         long endTime = System.nanoTime();
         long durationNano = endTime - startTime;
-        long averageNano = durationNano/numRuns;
+
+        long totalThreadDuration = 0;
+        for (long duration : threadDurations) {
+            totalThreadDuration += duration; // Sum of all thread durations
+        }
+
+        double averageDuration = totalThreadDuration / (1_000_000_000.0 * numRuns); // Average in seconds
         double duration = durationNano /1_000_000_000.0; // duration in nano seconds
-        double average = averageNano/1_000_000_000.0;
 
         System.out.printf("----Total Time: %.3f seconds----\n", duration);
-        System.out.printf("----Average Time: %.3f seconds----\n", average);
+        System.out.printf("----Average Time: %.3f seconds----\n", averageDuration);
     }
 }
 
@@ -142,11 +149,15 @@ class commandThread extends Thread {
     private String command;
     private String host;
     private int port;
+    private long[] threadDurations;
+    private int index;
 
-    public commandThread(String command, String host, int port) {
+    public commandThread(String command, String host, int port, long[] threadDurations, int index) {
         this.command = command;
         this.host = host;
         this.port = port;
+        this.threadDurations = threadDurations;
+        this.index = index;
     }
 
     public void run() {
@@ -181,6 +192,9 @@ class commandThread extends Thread {
 
             sb.append(String.format("--Thread Time: %.3f seconds--\n", duration));
             System.out.println(sb.toString());
+
+            // Store the duration in the correct index of the array
+            threadDurations[index] = durationNano;
         }
     }
 }

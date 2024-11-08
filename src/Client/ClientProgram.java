@@ -6,17 +6,17 @@ import java.util.Scanner;
 
 public class ClientProgram {
     public static void main(String[] args) {
-        //get host address and port
+        // Get host address and port
         String host = getHost();
         int port = getPort();
 
         String command = "invalid";
-        //Loops until exit command is issued
+        // Loop until exit command is issued
         while (!command.equals("exit")) {
-            //draws menu and prompts user for command
+            // Draws menu and prompts user for command
             command = menuChoice();
 
-            //if a valid command is provided user is prompted for a number of runs and threads are created/ran
+            // If a valid command is provided, user is prompted for number of runs and threads are created/runs
             if (!command.equals("invalid") && !command.equals("exit")) {
                 int numRuns = getNumRuns();
                 threadHandler(numRuns, command, host, port);
@@ -31,7 +31,7 @@ public class ClientProgram {
         while (port < 1025) {
             if (scanner.hasNextInt()) {
                 port = scanner.nextInt();
-                if (port >=1025 && port <=4998) {
+                if (port >= 1025 && port <= 4998) {
                     return port;
                 }
             } else scanner.next();
@@ -39,6 +39,7 @@ public class ClientProgram {
         }
         return port;
     }
+
     public static String getHost() {
         Scanner scanner = new Scanner(System.in);
         System.out.print("Enter your host address: ");
@@ -46,7 +47,7 @@ public class ClientProgram {
         return host;
     }
 
-    //draws menu
+    // Draws menu
     public static void drawMenu() {
         System.out.println("\n====Menu Options====");
         System.out.println("1. Date and Time");
@@ -58,15 +59,14 @@ public class ClientProgram {
         System.out.println("7. Exit");
         System.out.print("\nInput: ");
     }
-    //gets input from user and returns the corosponding command
-    public static String menuChoice() {
 
-        //scanner for menu
+    // Gets input from user and returns the corresponding command
+    public static String menuChoice() {
         Scanner scanner = new Scanner(System.in);
         String choice;
         drawMenu();
         choice = scanner.nextLine();
-        switch(choice) {
+        switch (choice) {
             case "1":
                 return "date";
             case "2":
@@ -87,7 +87,8 @@ public class ClientProgram {
                 return "invalid";
         }
     }
-    //gets number of runs from the user
+
+    // Gets number of runs from the user
     public static int getNumRuns() {
         Scanner scanner = new Scanner(System.in);
         int numRuns = -1;
@@ -105,22 +106,22 @@ public class ClientProgram {
         return numRuns;
     }
 
-    //creates specified number of threads to run specified command
+    // Creates specified number of threads to run the specified command
     public static void threadHandler(int numRuns, String command, String host, int port) {
         long startTime = System.nanoTime();
 
-        //array of threads
+        // Array of threads
         Thread[] threads = new Thread[numRuns];
         // Array to store durations
         long[] threadDurations = new long[numRuns];
 
-        //loops through array creating new commandThreads and starting them
+        // Loop through array creating new commandThreads and starting them
         for (int i = 0; i < numRuns; i++) {
             threads[i] = new commandThread(command, host, port, threadDurations, i);
             threads[i].start();
         }
 
-        //loops through thread array and waits for threads to be completed
+        // Loop through thread array and wait for threads to be completed
         for (Thread j : threads) {
             try {
                 j.join(); // Wait for each thread to finish
@@ -138,10 +139,35 @@ public class ClientProgram {
         }
 
         double averageDuration = totalThreadDuration / (1_000_000_000.0 * numRuns); // Average in seconds
-        double duration = durationNano /1_000_000_000.0; // duration in nano seconds
+        double duration = durationNano / 1_000_000_000.0; // Total duration in seconds
 
         System.out.printf("----Total Time: %.3f seconds----\n", duration);
         System.out.printf("----Average Time: %.3f seconds----\n", averageDuration);
+
+        // Write results to CSV with command-specific filename
+        writeToCSV(command, numRuns, threadDurations, duration, averageDuration);
+    }
+
+    // Writes results to a CSV file
+    public static void writeToCSV(String command, int numRuns, long[] threadDurations, double totalTime, double averageTime) {
+        // Sanitize command name to make it a valid filename
+        String filename = command.replaceAll("[^a-zA-Z0-9]", "_") + ".csv";
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filename, true))) {
+            // Write header if it's the first time writing to the file
+            File file = new File(filename);
+            if (file.length() == 0) {
+                writer.write("Command,Num Runs,Thread Time (s),Total Time (s),Average Time (s)\n");
+            }
+
+            // Write data for each thread
+            for (int i = 0; i < numRuns; i++) {
+                writer.write(String.format("%s,%d,%.3f,%.3f,%.3f\n",
+                        command, numRuns, threadDurations[i] / 1_000_000_000.0, totalTime, averageTime));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
 
@@ -165,18 +191,18 @@ class commandThread extends Thread {
 
         StringBuilder sb = new StringBuilder();
         try (Socket socket = new Socket(host, port)) {
-            //Input output streams
+            // Input-output streams
             InputStream input = socket.getInputStream();
             OutputStream output = socket.getOutputStream();
 
-            //Reader/writer for converting input/output streams from byte data to usable strings
+            // Reader/writer for converting input/output streams from byte data to usable strings
             BufferedReader reader = new BufferedReader(new InputStreamReader(input));
             PrintWriter writer = new PrintWriter(output, true);
 
-            //sends unix command to server
+            // Sends the unix command to the server
             writer.println(command);
 
-            //reads output from unix command sent by server and prints it
+            // Reads output from the unix command sent by the server and prints it
             String s;
             while ((s = reader.readLine()) != null) {
                 sb.append(s);
@@ -185,10 +211,10 @@ class commandThread extends Thread {
         } catch (IOException ex) {
             System.out.println("I/O error: " + ex.getMessage());
         } finally {
-            //calculates thread time and prints
+            // Calculates thread time and stores the result
             long endTime = System.nanoTime();
             long durationNano = endTime - startTime;
-            double duration = durationNano /1_000_000_000.0; // duration in nano seconds
+            double duration = durationNano / 1_000_000_000.0; // duration in seconds
 
             sb.append(String.format("--Thread Time: %.3f seconds--\n", duration));
             System.out.println(sb.toString());

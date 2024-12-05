@@ -13,6 +13,7 @@ public class ThreadedServerProgram {
             //accepts incoming connections
             while (true) {
                 Socket socket = serverSocket.accept();
+                //starts new thread with accepted socket
                 new ServiceThread(socket).start();
             }
 
@@ -41,6 +42,7 @@ public class ThreadedServerProgram {
 class ServiceThread extends Thread {
     private Socket socket;
 
+    //gets socket
     public ServiceThread(Socket socket) {
         this.socket = socket;
     }
